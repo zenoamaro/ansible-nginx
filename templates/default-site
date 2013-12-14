@@ -1,0 +1,19 @@
+# This is a default site configuration which will simply
+# return 404, preventing chance access to any other virtualhost.
+
+server {
+	listen {{nginx_default_http_port}} default_server;
+	server_name _;
+
+	error_page 404 /404.html;
+
+	# Everything is a 404
+	location / {
+		return 404;
+	}
+
+	# You may need this to prevent return 404; recursion
+	location = /404.html {
+		internal;
+	}
+}

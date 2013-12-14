@@ -1,0 +1,53 @@
+---
+
+# Official Nginx ppa for ubuntu-based distributions
+# http://nginx.org
+
+- name: Add official Debian APT repository
+  when: ansible_distribution == 'Debian'
+  sudo: yes
+  apt_repository:
+    repo: "deb http://nginx.org/packages/debian/ {{ansible_distribution_release}} nginx"
+  tags:
+    - nginx
+    - frontend
+    - repo
+
+# TODO: Add official Debian APT repository signing key
+# - name: Adding APT repository key
+#   when: ansible_distribution == 'Debian'
+#   sudo: yes
+#   apt_key:
+#     id: ...
+#     url: ...
+#   tags:
+#     - nginx
+#     - frontend
+#     - repo
+
+- name: Add Ubuntu community PPA
+  when: ansible_distribution == 'Ubuntu'
+  sudo: yes
+  apt_repository: repo='ppa:nginx/stable'
+  tags:
+    - nginx
+    - frontend
+    - repo
+
+- name: APT update
+  when: ansible_pkg_mgr == 'apt'
+  sudo: yes
+  apt: update_cache=yes
+  tags:
+    - nginx
+    - frontend
+    - repo
+
+- name: Install Nginx
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+  apt: name=nginx state=present
+  tags:
+    - nginx
+    - frontend
+    - deps

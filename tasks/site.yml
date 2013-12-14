@@ -1,0 +1,51 @@
+---
+
+# Include this task to create and link or remove a virtualhost.
+#
+#   site: The name of the site
+#   template: The template used to produce the site
+#   state: can be `present`, `enabled` (default), or `absent`
+#
+# Be aware that you will probably have to play with paths like this:
+#
+#   - include: ../../nginx/tasks/site.yml
+#     template: ../../caller/templates/virtualhost
+
+- name: "Site {{site}} | Create site"
+  sudo: yes
+  template:
+    src: "{{template or site}}"
+    dest: "{{nginx_available_sites_dir}}/{{site}}"
+  when: state is not defined or state in ['present', 'enabled']
+  notify: reload nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+    - sites
+
+- name: "Site {{site}} | Remove site"
+  sudo: yes
+  file:
+    dest: "{{nginx_available_sites_dir}}/{{site}}"
+    state: 'absent'
+  when: state is defined and state == 'absent'
+  notify: reload nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+    - sites
+
+- name: "Site {{site}} | Set site as {{'enabled' if (state is not defined or state == 'enabled') else 'disabled'}}"
+  sudo: yes
+  file:
+    src: "{{nginx_available_sites_dir}}/{{site}}"
+    dest: "{{nginx_enabled_sites_dir}}/{{site}}"
+    state: "{{'link' if (state is not defined or state == 'enabled') else 'absent'}}"
+  notify: reload nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+    - sites
