@@ -1,0 +1,32 @@
+---
+
+- name: Configure Nginx
+  sudo: yes
+  template:
+    src: "{{item}}"
+    dest: "{{nginx_conf_dir}}/{{item}}"
+  with_items:
+    - nginx.conf
+    - fastcgi_params
+  notify: restart nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+
+- name: Configure Nginx
+  sudo: yes
+  copy:
+    src: "{{item}}"
+    dest: "{{nginx_conf_dir}}/{{item}}"
+  with_items:
+    - mime.types
+  notify: restart nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+
+- include: site.yml
+  site: "{{nginx_default_site_name}}"
+  template: default-site

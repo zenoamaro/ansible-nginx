@@ -1,0 +1,183 @@
+---
+
+nginx_user: www-data
+nginx_group: "{{nginx_user}}"
+
+
+# Locations
+# ---------
+
+nginx_conf_dir: /etc/nginx
+nginx_additional_conf_dir: "{{nginx_conf_dir}}/conf.d"
+nginx_log_dir: /var/log/nginx
+nginx_runtime_dir: /var/run
+nginx_available_sites_dir: "{{nginx_conf_dir}}/sites-available"
+nginx_enabled_sites_dir: "{{nginx_conf_dir}}/sites-enabled"
+nginx_default_site_name: default
+
+
+# Resources
+# ---------
+
+nginx_default_http_port: 80
+nginx_default_https_port: 443
+
+nginx_pid_file: "{{nginx_runtime_dir}}/nginx.pid"
+
+# How many workers to be made available for processing requests.
+# If defined, this will have priority over the per-cpu setting.
+# nginx_workers_count: 2
+
+# Rather than specifying a predeterminate amount of workers,
+# you can decide on a per-core setting.
+nginx_workers_per_core: 1
+
+# Override OS' limit values
+nginx_worker_rlimit_nofile: 10000
+
+nginx_worker_connections: 1024
+nginx_keepalive_timeout:  65
+
+nginx_server_names_hash_bucket_size: 64
+nginx_types_hash_max_size: 2048
+nginx_types_hash_bucket_size: 64
+
+# Accept as many connections as possible, after nginx
+# gets notification about a new connection.
+# May flood worker_connections, if that option is set too low.
+nginx_multi_accept: yes
+
+# Caches information about open FDs, freqently accessed files.
+nginx_open_file_cache_max: 200000
+nginx_open_file_cache_inactive: 20s
+nginx_open_file_cache_valid: 30s
+nginx_open_file_cache_min_uses: 2
+nginx_open_file_cache_errors: yes
+
+# Sendfile copies data between one FD and other
+# from within the kernel. More efficient than read() + write(),
+# since the requires transferring data to and from the user space.
+nginx_sendfile: yes
+
+# Causes nginx to attempt to send its HTTP response head
+# in one packet, instead of using partial frames.
+# This is useful for prepending headers before calling
+# sendfile, or for throughput optimization.
+nginx_tcp_nopush: yes
+
+# Don't buffer data-sends (disable Nagle algorithm).
+# Good for sending frequent small bursts of data in real time.
+nginx_tcp_nodelay: yes
+
+# Timeout for keep-alive connections.
+# Server will close connections after this time.
+nginx_keepalive_timeout: 30
+
+# Number of requests a client can make over the keep-alive connection.
+nginx_keepalive_requests: 100
+
+# allow the server to close the connection after a client
+# stops responding. Frees up socket-associated memory.
+nginx_reset_timedout_connection: yes
+
+# Send the client a "request timed out" if the body
+# is not loaded by this time. Default 60.
+nginx_client_body_timeout: 10
+
+# If the client stops reading data, free up the stale
+# client connection after this much time.
+nginx_send_timeout: 2
+
+
+# Mime and content-types
+# ----------------------
+
+nginx_mimetype_definitions_file: "{{nginx_conf_dir}}/mime.types"
+nginx_default_mimetype: application/octet-stream
+
+
+# Compression
+# -----------
+
+nginx_gzip: yes
+nginx_gzip_http_version: 1.0
+nginx_gzip_comp_level: 6
+nginx_gzip_min_length: 10000
+nginx_gzip_proxied:
+  - expired
+  - no-cache
+  - no-store
+  - private
+  - auth
+nginx_gzip_vary: no
+nginx_gzip_types:
+  - text/plain
+  - text/css
+  - application/x-javascript
+  - text/xml
+  - application/xml
+  - application/xml+rss
+  - text/javascript
+  - application/javascript
+  - application/json
+nginx_gzip_disable: 'MSIE [1-6]\.'
+
+
+# Logging
+# -------
+
+nginx_log_formats:
+  main: $remote_addr - $remote_user ($time_local) $status "$request" $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"
+
+nginx_error_log_file: "{{nginx_log_dir}}/error.log"
+nginx_error_log_level: error
+
+nginx_access_log_file: "{{nginx_log_dir}}/access.log"
+nginx_access_log_format: main
+nginx_access_log_buffer: 16k  # Buffer log writes to speed up IO
+
+
+
+# Fast CGI parameters
+# -------------------
+
+nginx_fastcgi_query_string:      $query_string
+nginx_fastcgi_request_method:    $request_method
+nginx_fastcgi_content_type:      $content_type
+nginx_fastcgi_content_length:    $content_length
+nginx_fastcgi_script_filename:   $request_filename
+nginx_fastcgi_script_name:       $fastcgi_script_name
+nginx_fastcgi_request_uri:       $request_uri
+nginx_fastcgi_document_uri:      $document_uri
+nginx_fastcgi_document_root:     $document_root
+nginx_fastcgi_server_protocol:   $server_protocol
+nginx_fastcgi_gateway_interface: CGI/1.1
+nginx_fastcgi_server_software:   nginx/$nginx_version
+nginx_fastcgi_remote_addr:       $remote_addr
+nginx_fastcgi_remote_port:       $remote_port
+nginx_fastcgi_server_addr:       $server_addr
+nginx_fastcgi_server_port:       $server_port
+nginx_fastcgi_server_name:       $server_name
+nginx_fastcgi_https:             $https
+nginx_fastcgi_redirect_status:   200
+
+
+# Access control and security
+# ---------------------------
+
+nginx_server_tokens: no
+
+# A list of access control rules.
+# Allows everything by default. Override with your rules.
+nginx_access_control_rules:
+# - deny    192.168.1.1
+# - allow   192.168.1.0/24
+# - deny    all
+  - allow   all
+
+
+# A regex that should match user agents to be blocked.
+# Can also be a list, which will be joined with pipes.
+# Bear in mind that it will still compile as a regex.
+nginx_blocked_user_agents: ''
+nginx_blocked_user_agents_status_code: 403
