@@ -36,7 +36,7 @@ Usage
 
 Clone this repo into your roles directory:
 
-    $ git clone https://github.com/user/ansible-nginx.git roles/nginx
+    $ git clone https://github.com/zenoamaro/ansible-nginx.git roles/nginx
 
 And add it to your play's roles:
 

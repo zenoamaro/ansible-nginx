@@ -14,7 +14,7 @@
 - name: "Site {{site}} | Create site"
   sudo: yes
   template:
-    src: "{{template or site}}"
+    src: "{{template|default(site)}}"
     dest: "{{nginx_available_sites_dir}}/{{site}}"
   when: state is not defined or state in ['present', 'enabled']
   notify: reload nginx
