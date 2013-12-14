@@ -1,11 +1,11 @@
 ---
 
-# Configuration directives for Travis-CI
+# Configuration directives for Travis CI
 # --------------------------------------
 
 # See the Travis documentation for help on writing this file.
 
-# [Travis-CI] http://travis-ci.org
+# [Travis CI] http://travis-ci.org
 # [configuration] http://about.travis-ci.org/docs/user/build-configuration/
 
 
