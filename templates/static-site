@@ -1,0 +1,38 @@
+server {
+
+	listen {{port|default(nginx_default_http_port)}};
+{% if server_name %}
+	server_name {{server_name}};
+{% else %}
+	server_name default_server;
+{% endif %}
+
+{% if log_assets|default(False) and access_log|default(False) %}
+	access_log {{access_log}};
+{% else %}
+	access_log off;
+{% endif %}
+{% if error_log|default(False) %}
+	error_log {{error_log}};
+{% endif %}
+
+	root {{document_root}};
+	expires max;  # Cache assets indefinitely
+
+	# Ignore files starting with `~`
+	location ~ ^~*$ {
+		return 404;
+	}
+
+	# Log access to html files, and expire them in 1h
+	location ~*\.(html)$ {
+{% if access_log|default(False) %}
+		access_log {{access_log}};
+{% endif %}
+		expires 1h;
+	}
+
+	# Redirect server error pages to the static page /50x.html
+	error_page 500 502 503 504 /50x.html;
+
+}

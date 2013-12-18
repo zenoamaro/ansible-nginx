@@ -1,3 +1,6 @@
 # Don't commit vagrant's machine specifications,
 # which are unique for each installation.
 /.vagrant/
+
+# Ignore the www directory used for boxed installs
+/~www/

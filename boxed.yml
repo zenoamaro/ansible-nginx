@@ -11,14 +11,24 @@
 
   hosts: vagrant
 
+  # vars:
+  #   custom_configuration: value
+
   pre_tasks:
-    # Better safe than sorry
+    # Most vagrant boxes have outdated repositories
     - name: APT update
       sudo: yes
       apt: update_cache=yes
 
-  # vars:
-    # custom_configuration: value
+  post_tasks:
+    # Produce a default site pointing to the shared folder
+    - include: tasks/site.yml
+      site: www
+      port: 80
+      server_name: 192.168.33.20
+      access_log: /var/www/site/~access.log
+      error_log: /var/www/site/~error.log
+      document_root: /var/www/site
 
   roles:
     - '.'    # The current directory itself is the role

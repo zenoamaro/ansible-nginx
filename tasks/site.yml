@@ -4,17 +4,20 @@
 #
 #   site: The name of the site
 #   template: The template used to produce the site
+#             (a simple static-serving website by default)
 #   state: can be `present`, `enabled` (default), or `absent`
 #
 # Be aware that you will probably have to play with paths like this:
 #
 #   - include: ../../nginx/tasks/site.yml
 #     template: ../../caller/templates/virtualhost
+#
+# Other specified properties will be available to the template.
 
 - name: "Site {{site}} | Create site"
   sudo: yes
   template:
-    src: "{{template|default(site)}}"
+    src: "{{template|default('static-site')}}"
     dest: "{{nginx_available_sites_dir}}/{{site}}"
   when: state is not defined or state in ['present', 'enabled']
   notify: reload nginx

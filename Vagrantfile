@@ -26,12 +26,14 @@ Vagrant.configure '2' do |config|
 		end
 
 		# Forward this installation to a port on the host
+		# Note that you need a full reload to apply this change.
 		# config.vm.network :forwarded_port, guest: 80, host: 8080
 
-		# You may want to share a folder from your host system
-		# machine.vm.synced_folder '/path/to/host/holder', '/var/www/site',
-		#	:mount_options => ['dmode=777', 'fmode=777'],
-		#	:disabled => false
+		# You may want to share a folder from your host system.
+		# Note that you need a full reload to apply this change.
+		config.vm.synced_folder './~www', '/var/www/site',
+			:mount_options => ['dmode=777', 'fmode=777'],
+			:disabled => false
 	end
 
 

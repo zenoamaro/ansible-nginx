@@ -51,7 +51,7 @@ You can also use the role as a playbook. You will be asked which hosts to provis
 
     $ ansible-playbook -i inventory --extra-vars='{...}' main.yml
 
-To provision a standalone Nginx box, start the `boxed` VM, which is a Ubuntu 12.04 box:
+To provision a standalone Nginx box, create a `~www` directory (by default) with the contents you wish to serve, and start the `boxed` VM, which is a Ubuntu 12.04 box:
 
     $ vagrant up boxed
 

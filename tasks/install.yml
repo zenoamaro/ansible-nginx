@@ -13,17 +13,15 @@
     - frontend
     - repo
 
-# TODO: Add official Debian APT repository signing key
-# - name: Adding APT repository key
-#   when: ansible_distribution == 'Debian'
-#   sudo: yes
-#   apt_key:
-#     id: ...
-#     url: ...
-#   tags:
-#     - nginx
-#     - frontend
-#     - repo
+- name: Adding APT repository key
+  when: ansible_distribution == 'Debian'
+  sudo: yes
+  apt_key:
+    url: "http://nginx.org/keys/nginx_signing.key"
+  tags:
+    - nginx
+    - frontend
+    - repo
 
 - name: Add Ubuntu community PPA
   when: ansible_distribution == 'Ubuntu'
