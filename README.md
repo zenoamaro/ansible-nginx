@@ -63,6 +63,9 @@ Run the tests by provisioning the appropriate VM:
 
 At the moment, `ubuntu-precise` is the only test VM available.
 
+This role will create a default config that will return 404 on all requests. If you do not want that,
+define nginx_default_site_name to false.
+
 
 Still to do
 -----------
