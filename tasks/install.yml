@@ -35,7 +35,7 @@
 - name: APT update
   when: ansible_pkg_mgr == 'apt'
   sudo: yes
-  apt: update_cache=yes
+  apt: update_cache=yes valid_time=7200
   tags:
     - nginx
     - frontend
