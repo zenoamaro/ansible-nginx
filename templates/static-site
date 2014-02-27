@@ -1,7 +1,7 @@
 server {
 
 	listen {{port|default(nginx_default_http_port)}};
-{% if server_name is defined %}
+{% if server_name is defined and server_name %}
 	server_name {{server_name}};
 {% else %}
 	server_name default_server;
