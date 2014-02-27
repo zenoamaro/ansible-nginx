@@ -1,4 +1,7 @@
 ---
+- name: Install munin-node
+  apt: pkg=munin-node state=present
+
 - name: Symlink munin plugins
   sudo: yes
   file: src={{munin_available_plugins_dir}}/{{item}} dest={{munin_enabled_plugins_dir}}/{{item}} state=link
