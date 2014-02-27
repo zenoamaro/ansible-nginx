@@ -81,3 +81,9 @@ Changelog
 ### 0.1
 
 Initial version.
+
+
+Contributions and credits
+-------------------------
+
+Many thanks to [@do3cc](https://github.com/do3cc) for his contributions.
