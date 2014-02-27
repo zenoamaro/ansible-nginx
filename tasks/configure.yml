@@ -30,3 +30,4 @@
 - include: site.yml
   site: "{{nginx_default_site_name}}"
   template: default-site
+  when: nginx_create_default_site

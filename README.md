@@ -47,6 +47,8 @@ And add it to your play's roles:
 
 This roles comes preloaded with almost every available default. You can override each one in your hosts/group vars, in your inventory, or in your play. See the annotated defaults in `defaults/main.yml` for help in configuration. All provided variables start with `nginx_`.
 
+The role provides a default fallback site which returns 404 to all requests not matched by other rules. You can set `nginx_create_default_site` to `false` to disable it.
+
 You can also use the role as a playbook. You will be asked which hosts to provision, and you can further configure the play by using `--extra-vars`.
 
     $ ansible-playbook -i inventory --extra-vars='{...}' main.yml

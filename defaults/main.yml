@@ -13,6 +13,8 @@ nginx_log_dir: /var/log/nginx
 nginx_runtime_dir: /var/run
 nginx_available_sites_dir: "{{nginx_conf_dir}}/sites-available"
 nginx_enabled_sites_dir: "{{nginx_conf_dir}}/sites-enabled"
+
+nginx_create_default_site: yes
 nginx_default_site_name: default
 
 
