@@ -6,6 +6,7 @@
 - name: Add official Debian APT repository
   when: ansible_distribution == 'Debian'
   sudo: yes
+  register: _repo
   apt_repository:
     repo: "deb http://nginx.org/packages/debian/ {{ansible_distribution_release}} nginx"
   tags:
@@ -16,6 +17,7 @@
 - name: Adding APT repository key
   when: ansible_distribution == 'Debian'
   sudo: yes
+  register: _repo_key
   apt_key:
     url: "http://nginx.org/keys/nginx_signing.key"
   tags:
@@ -26,6 +28,7 @@
 - name: Add Ubuntu community PPA
   when: ansible_distribution == 'Ubuntu'
   sudo: yes
+  register: _repo
   apt_repository: repo='ppa:nginx/stable'
   tags:
     - nginx
@@ -35,7 +38,9 @@
 - name: APT update
   when: ansible_pkg_mgr == 'apt'
   sudo: yes
-  apt: update_cache=yes cache_valid_time=7200
+  when: _repo_key.changed or _repo.changed
+  apt:
+    update_cache: yes
   tags:
     - nginx
     - frontend
