@@ -3,3 +3,5 @@
 - include: prerequisites.yml
 - include: install.yml
 - include: configure.yml
+- include: munin.yml
+  when: munin

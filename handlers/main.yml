@@ -7,3 +7,7 @@
 - name: reload nginx
   sudo: yes
   service: name=nginx state=reloaded
+
+- name: restart munin-node
+  sudo: yes
+  service: name=munin-node state=restarted

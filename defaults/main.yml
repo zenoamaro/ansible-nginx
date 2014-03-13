@@ -184,3 +184,8 @@ nginx_access_control_rules:
 # Bear in mind that it will still compile as a regex.
 nginx_blocked_user_agents: ''
 nginx_blocked_user_agents_status_code: 403
+
+# Munin defaults
+# ----------------------------
+munin_available_plugins_dir: /usr/share/munin/plugins
+munin_enabled_plugins_dir: /etc/munin/plugins
