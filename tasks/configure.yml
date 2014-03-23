@@ -33,14 +33,7 @@
   template: default-site
   when: nginx_create_default_site
 
-- name: Add status site for monitoring
-  sudo: yes
-  copy: src=status-site dest={{nginx_available_sites_dir}}/status-site
-  notify: reload nginx
-  when: nginx_create_status_site
-
-- name: Activate status site for monitoring
-  sudo: yes
-  file: src={{nginx_available_sites_dir}}/status-site dest={{nginx_enabled_sites_dir}}/status-site state=link
-  notify: reload nginx
+- include: site.yml
+  site: status
+  template: status-site
   when: nginx_create_status_site
