@@ -112,6 +112,17 @@ nginx_reset_timedout_connection: yes
 # is not loaded by this time. Default 60.
 nginx_client_body_timeout: 10
 
+# Specifies the maximum accepted body size of a client request, as
+# indicated by the request header Content-Length.
+#
+# If the stated content length is greater than this size, then the
+# client receives the HTTP error code 413 ("Request Entity Too
+# Large"). It should be noted that web browsers do not usually
+# know how to properly display such an HTTP error.
+#
+# Set to 0 to disable.
+nginx_client_max_body_size: 1m
+
 # If the client stops reading data, free up the stale
 # client connection after this much time.
 nginx_send_timeout: 2
