@@ -17,6 +17,7 @@ nginx_enabled_sites_dir: "{{nginx_conf_dir}}/sites-enabled"
 nginx_create_status_site: yes
 nginx_create_default_site: yes
 nginx_default_site_name: default
+block_robots: false
 
 
 # SSL

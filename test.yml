@@ -25,6 +25,17 @@
       sudo: yes
       apt: update_cache=yes
 
+  post_tasks:
+    # Produce a default site pointing to the shared folder
+    - include: tasks/site.yml
+      site: www
+      port: 80
+      block_robots: true
+      server_name: 192.168.33.20
+      access_log: /var/www/site/~access.log
+      error_log: /var/www/site/~error.log
+      document_root: /var/www/site
+
   roles:
     - '.'    # The current directory itself is the role
 

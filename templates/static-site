@@ -19,6 +19,13 @@ server {
 	root {{document_root}};
 	expires max;  # Cache assets indefinitely
 
+{% if block_robots %}
+	location = /robots.txt { 
+	    access_log off; 
+	    alias {{ nginx_conf_dir }}/no_robots.txt;
+	}
+{% endif %}
+
 	# Ignore files starting with `~`
 	location ~ ^~*$ {
 		return 404;
