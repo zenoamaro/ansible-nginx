@@ -1,12 +1,11 @@
 Nginx for Ansible
 =================
 
-A role for deploying and configuring [Nginx](http://nginx.com) and extensions on unix hosts using [Ansible](http://www.ansibleworks.com/).
+A role for deploying and configuring [Nginx](http://nginx.com) and extensions on UNIX hosts using [Ansible](http://www.ansibleworks.com/).
 
 It can additionally be used as a playbook for quickly provisioning hosts.
 
 Vagrant machines are provided to produce a boxed install of Nginx or a VM for integration testing.
-
 
 Supports
 --------
@@ -29,7 +28,6 @@ Installation methods:
 Callable tasks:
 
 - `site`: Creates and enables (or removes) a nginx site
-
 
 Usage
 -----
@@ -65,6 +63,134 @@ Run the tests by provisioning the appropriate VM:
 
 At the moment, `ubuntu-precise` is the only test VM available.
 
+Customizing Nginx site
+-----------------------
+
+The easiest way to customize your Nginx deployment
+is to pass your own server configuration file for Nginx.
+This can be done using Ansible templates.
+
+Below is an example which
+
+- Deploys a static HTTPS site on Nginx
+
+- Site content is synced from Github repository using SSH
+
+- Nginx server configuration file is generated from the supplied `site.conf` template
+
+Related files and folders you need to have
+
+- `keys/github` - Private key for [Github deployment key](https://developer.github.com/guides/managing-deploy-keys/)
+
+- `keys/github.pub` - Public key for [Github deployment key](https://developer.github.com/guides/managing-deploy-keys/)
+
+- `keys/example.crt` - SSL certificate (bundle) for your site, in OpenSSL format.
+
+- `keys/example.key` - SSL private key.
+
+- `roles/nginx` - This Ansible role, cloned as above.
+
+- `site.conf` - your custom Nginx server configuration file, example below.
+
+- `playbook.yml` - Deployment playbook. The playbook has been simplified for the example, as many file and folder locations are harcoded-
+
+To run the playbook you need to pass the public HTTP/HTTPS IP address as a parameter:
+
+    $ ansible-playbook -i yourinventoryfile --extra-vars "public_ip=1.2.3.4" playbook.yml
+
+Playbook `playbook.yml`:
+```
+- hosts: example
+
+  vars:
+    nginx_create_default_site: no
+
+  roles:
+   - nginx
+
+  pre_tasks:
+    # Get apt up-to-date
+    - name: APT update
+      sudo: yes
+      apt: update_cache=yes
+
+    - name: Install required software for performing the deployment
+      sudo: yes
+      apt: name={{ item }} state=installed
+      with_items:
+        - git
+
+    - name: Creates .ssh directory for root
+      sudo: yes
+      file: path=/root/.ssh state=directory
+
+    # This public key is set on Github repo Settings under "Deploy keys"
+    - name: Upload the private key used for Github cloning
+      sudo: yes
+      copy: src=keys/github dest=/root/.ssh/github
+
+    - name: Correct SSH deploy key permissions
+      sudo: yes
+      file: dest=/root/.ssh/github mode=0600
+
+    - name: Deploy site files from Github repository
+      sudo: yes
+      git: repo=git@github.com:miohtama/example.git dest=/srv/nginx/example key_file=/root/.ssh/github accept_hostkey=yes
+
+    - name: Deploy SSL private key
+      sudo: yes
+      copy: src=keys/example.key dest=/root/example.key
+
+    - name: Deploy SSL certificate
+      sudo: yes
+      copy: src=keys/example.crt dest=/root/example.crt
+
+    - name: Set www-data file access right for the site
+      sudo: yes
+      file: path=/srv/nginx/example
+            owner=www-data
+            group=www-data
+            mode=0770 recurse=yes
+            state=directory
+
+  post_tasks:
+    # Produce a default site pointing to the shared folder
+    - include: roles/nginx/tasks/site.yml
+      template: site.conf
+      site: example
+      server_name: example.com
+      access_log: /var/log/nginx/example.access.log
+      error_log: /var/log/nginx/example.error.log
+      document_root: /srv/nginx/example
+      ssl_certificate: /root/example.crt
+      ssl_certificate_key: /root/example.key
+```
+
+Then your Nginx configuration template, `site.conf`
+
+```nginx
+# Redirect all HTTP traffic to HTTPS
+server {
+    listen {{public_ip}}:80;
+    server_name {{server_name}};
+    rewrite ^/(.*) https://{{server_name}}/$1 permanent;
+}
+
+# Serve HTTPS traffic
+server {
+
+    listen {{public_ip}}:443;
+    server_name {{server_name}};
+
+    ssl on;
+    ssl_certificate {{ssl_certificate}};
+    ssl_certificate_key {{ssl_certificate_key}};
+
+    access_log {{access_log}};
+    error_log {{error_log}};
+    root {{document_root}};
+}
+```
 
 Still to do
 -----------
@@ -73,7 +199,6 @@ Still to do
 - Add a library of modules (if possible)
 - Add useful snippets for tuning, proxying, and writing virtualhosts
 - Add quick site definition and shared folder for boxed instances
-
 
 Changelog
 ---------
