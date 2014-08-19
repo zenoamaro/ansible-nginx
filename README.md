@@ -30,6 +30,9 @@ Callable tasks:
 
 - `site`: Creates and enables (or removes) a nginx site
 
+The callable task can be customized::
+- `block_robots`: If set to true, nginx loads a generic robots.txt on /robot.txt that disallows all robots to access the site. Good for test sites. Default is off.
+
 
 Usage
 -----

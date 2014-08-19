@@ -22,6 +22,7 @@
     dest: "{{nginx_conf_dir}}/{{item}}"
   with_items:
     - mime.types
+    - no_robots.txt
   notify: restart nginx
   tags:
     - nginx
