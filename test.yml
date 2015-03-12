@@ -12,18 +12,12 @@
 # or comprehensive configuration possible for your role.
 
 
-- name: 'Nginx role integration tests'
+- name: 'Role integration tests'
 
   hosts: test
 
   vars:
     # custom_configuration: value
-
-  pre_tasks:
-    # Most vagrant boxes have outdated repositories
-    - name: APT update
-      sudo: yes
-      apt: update_cache=yes
 
   roles:
     - '.'    # The current directory itself is the role

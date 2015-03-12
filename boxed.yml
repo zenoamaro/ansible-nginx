@@ -14,12 +14,6 @@
   # vars:
   #   custom_configuration: value
 
-  pre_tasks:
-    # Most vagrant boxes have outdated repositories
-    - name: APT update
-      sudo: yes
-      apt: update_cache=yes
-
   post_tasks:
     # Produce a default site pointing to the shared folder
     - include: tasks/site.yml
