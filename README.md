@@ -10,17 +10,16 @@ Vagrant machines are provided to produce a boxed install of Nginx or a VM for in
 
 Supports
 --------
-
 Supported Nginx versions:
 
 - Nginx 1.4
 - Nginx 1.x (untested)
 
 Supported targets:
-
-- Ubuntu 12.04 "Precise Pangolin"
-- Ubuntu LTS (untested)
+- Ubuntu 14.04 LTS "Trusty Tahr"
+- Ubuntu 12.04 LTS "Precise Pangolin"
 - Debian (untested)
+- RedHat (untested)
 
 Installation methods:
 
@@ -33,7 +32,6 @@ Callable tasks:
 
 Usage
 -----
-
 Clone this repo into your roles directory:
 
     $ git clone https://github.com/zenoamaro/ansible-nginx.git roles/nginx
@@ -61,14 +59,16 @@ You will find Nginx listening on the VM's on address `192.168.33.20` in the priv
 
 Run the tests by provisioning the appropriate VM:
 
-    $ vagrant up test-ubuntu-precise
+    $ vagrant up test-ubuntu-trusty
 
-At the moment, `ubuntu-precise` is the only test VM available.
+At the moment, the following test boxes are available:
+
+- `test-ubuntu-precise`
+- `test-ubuntu-trusty`
 
 
 Still to do
 -----------
-
 - Support other distros
 - Add a library of modules (if possible)
 - Add useful snippets for tuning, proxying, and writing virtualhosts
@@ -77,13 +77,34 @@ Still to do
 
 Changelog
 ---------
+### 0.1.1
+- The package list is not being updated in playbooks anymore.
+- Added more test machines.
 
 ### 0.1
-
 Initial version.
 
 
-Contributions and credits
--------------------------
+License
+-------
+The MIT License (MIT)
 
-Many thanks to [@do3cc](https://github.com/do3cc) for his contributions.
+Copyright (c) 2015, zenoamaro <zenoamaro@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
