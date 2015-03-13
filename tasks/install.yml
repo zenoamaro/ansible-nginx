@@ -1,23 +1,21 @@
 ---
 
-# Official Nginx ppa for ubuntu-based distributions
-# http://nginx.org
+# Targeting specific OSes or distributions:
+#
+#   - `ansible_system`               → Linux, BSD, ...
+#   - `ansible_os_family`            → Debian, RedHat, ...
+#   - `ansible_distribution`         → Debian, Ubuntu, RedHat, ...
+#   - `ansible_distribution_release` → precise, wheezy, ...
+#   - `ansible_pkg_mgr`              → apt, yum, ...
+#   - `ansible_architecture`         → x86_64, x86_32, ...
 
-- name: Add official Debian APT repository
-  when: ansible_distribution == 'Debian'
-  sudo: yes
-  register: _deb_repo
-  apt_repository:
-    repo: "deb http://nginx.org/packages/debian/ {{ansible_distribution_release}} nginx"
-  tags:
-    - nginx
-    - frontend
-    - repo
+
+# Debian
+# ------
 
 - name: Adding APT repository key
-  when: ansible_distribution == 'Debian'
+  when: ansible_os_family == 'Debian'
   sudo: yes
-  register: _deb_repo_key
   apt_key:
     url: "http://nginx.org/keys/nginx_signing.key"
   tags:
@@ -25,21 +23,11 @@
     - frontend
     - repo
 
-- name: Add Ubuntu community PPA
-  when: ansible_distribution == 'Ubuntu'
+- name: Add official APT repository
+  when: ansible_os_family == 'Debian'
   sudo: yes
-  register: _ubu_repo
-  apt_repository: repo='ppa:nginx/stable'
-  tags:
-    - nginx
-    - frontend
-    - repo
-
-- name: APT update
-  when: ansible_pkg_mgr == 'apt' and (_deb_repo_key.changed or _deb_repo.changed or _ubu_repo.changed)
-  sudo: yes
-  apt:
-    update_cache: yes
+  apt_repository:
+    repo: "deb http://nginx.org/packages/{{ansible_distribution|lower}}/ {{ansible_distribution_release}} nginx"
   tags:
     - nginx
     - frontend
@@ -48,7 +36,11 @@
 - name: Install Nginx
   when: ansible_os_family == 'Debian'
   sudo: yes
-  apt: name=nginx state=present
+  apt: 
+    name: "nginx={{nginx_version}}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
   tags:
     - nginx
     - frontend
