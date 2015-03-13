@@ -1,5 +1,19 @@
 ---
 
+- name: Create sites directories
+  sudo: yes
+  file:
+    dest: "{{item}}"
+    state: directory
+  with_items:
+    - "{{nginx_available_sites_dir}}"
+    - "{{nginx_enabled_sites_dir}}"
+  notify: restart nginx
+  tags:
+    - nginx
+    - frontend
+    - conf
+
 - name: Configure Nginx
   sudo: yes
   template:
