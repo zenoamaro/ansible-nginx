@@ -11,22 +11,19 @@ Vagrant machines are provided to produce a boxed install of Nginx or a VM for in
 Supports
 --------
 Supported Nginx versions:
-
-- Nginx 1.4
-- Nginx 1.x (untested)
+- Nginx 1.6.x
+- Nginx 1.5.x
+- Nginx 1.4.x
 
 Supported targets:
 - Ubuntu 14.04 LTS "Trusty Tahr"
 - Ubuntu 12.04 LTS "Precise Pangolin"
 - Debian (untested)
-- RedHat (untested)
 
 Installation methods:
-
 - Binary packages from the official repositories at [nginx](http://wiki.nginx.org/Install)
 
 Callable tasks:
-
 - `site`: Creates and enables (or removes) a nginx site
 
 
@@ -43,6 +40,8 @@ And add it to your play's roles:
         - nginx
         - ...
 
+It is recommended that you pin your NGINX version by setting `nginx_version` to something like `1.6.2`, `1.6.*` or even `1.*`.
+
 This roles comes preloaded with almost every available default. You can override each one in your hosts/group vars, in your inventory, or in your play. See the annotated defaults in `defaults/main.yml` for help in configuration. All provided variables start with `nginx_`.
 
 The role provides a default fallback site which returns 404 to all requests not matched by other rules. You can set `nginx_create_default_site` to `false` to disable it.
@@ -51,7 +50,7 @@ You can also use the role as a playbook. You will be asked which hosts to provis
 
     $ ansible-playbook -i inventory --extra-vars='{...}' main.yml
 
-To provision a standalone Nginx box, create a `~www` directory (by default) with the contents you wish to serve, and start the `boxed` VM, which is a Ubuntu 12.04 box:
+To provision a standalone Nginx box, create a `~www` directory (by default) with the contents you wish to serve, and start the `boxed` VM, which is a Ubuntu 14.04 box:
 
     $ vagrant up boxed
 
