@@ -76,6 +76,9 @@ Still to do
 
 Changelog
 ---------
+### 0.2
+- Added version pinning. Currently tracking `v1.6.x`.
+
 ### 0.1.1
 - The package list is not being updated in playbooks anymore.
 - Added more test machines.
