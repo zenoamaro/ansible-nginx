@@ -43,11 +43,13 @@
     - conf
 
 - include: site.yml
-  site: "{{nginx_default_site_name}}"
-  template: default-site
-  when: nginx_create_default_site
+  vars:
+    site: "{{nginx_default_site_name}}"
+    template: default-site
+    when: nginx_create_default_site
 
 - include: site.yml
-  site: status
-  template: status-site
-  when: nginx_create_status_site
+  vars:
+    site: status
+    template: status-site
+    when: nginx_create_status_site
